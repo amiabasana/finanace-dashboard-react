@@ -12,6 +12,7 @@ import {
   YAxis,
 } from 'recharts'
 import { useFinance } from '../context/FinanceContext.jsx'
+import { RevealOnScroll } from '../components/RevealOnScroll.jsx'
 
 const currency = (n) =>
   n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
@@ -26,7 +27,7 @@ const tooltipStyle = {
   labelStyle: { color: '#9da3af' },
 }
 
-function StatCard({ title, value, hint, accent }) {
+function StatCard({ title, value, accent }) {
   const bg =
     accent === 'accent'
       ? 'bg-fd-accent-soft border-fd-border-accent'
@@ -42,7 +43,7 @@ function StatCard({ title, value, hint, accent }) {
       <p className="mt-2 text-2xl font-semibold tabular-nums text-fd-text sm:text-3xl">
         {value}
       </p>
-      {hint ? <p className="mt-1 text-xs text-fd-text-accent">{hint}</p> : null}
+      {/* {hint ? <p className="mt-1 text-xs text-fd-text-accent">{hint}</p> : null} */}
     </div>
   )
 }
@@ -72,7 +73,7 @@ export function Dashboard() {
   const hasData = transactions.length > 0
 
   return (
-    <div className="mx-auto flex max-w-full flex-col gap-6">
+    <RevealOnScroll className="mx-auto flex max-w-full flex-col gap-6">
       {!hasData ? (
         <div
           className="rounded-xl border border-fd-border-accent bg-fd-accent-soft px-4 py-3 text-sm text-fd-text"
@@ -85,25 +86,31 @@ export function Dashboard() {
       ) : null}
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <StatCard
-          title="Total balance"
-          value={currency(summary.balance)}
-          hint="Income minus expenses (all time)"
-          accent="accent"
-        />
-        <StatCard
-          title="Total income"
-          value={currency(summary.totalIncome)}
-          accent="success"
-        />
-        <StatCard
-          title="Total expenses"
-          value={currency(summary.totalExpense)}
-        />
+        <div data-reveal>
+          <StatCard
+            title="Total balance"
+            value={currency(summary.balance)}
+            // hint="Income minus expenses (all time)"
+            accent="accent"
+          />
+        </div>
+        <div data-reveal>
+          <StatCard
+            title="Total income"
+            value={currency(summary.totalIncome)}
+            accent="success"
+          />
+        </div>
+        <div data-reveal>
+          <StatCard
+            title="Total expenses"
+            value={currency(summary.totalExpense)}
+          />
+        </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-xl border border-fd-border bg-fd-glass-5 p-4">
+        <section data-reveal className="rounded-xl border border-fd-border bg-fd-glass-5 p-4">
           <h2 className="text-sm font-semibold text-fd-text">Balance trend</h2>
           <p className="mt-1 text-xs text-fd-text-muted">
             Running balance by month (cumulative net cash flow)
@@ -154,7 +161,7 @@ export function Dashboard() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-fd-border bg-fd-surface p-4">
+        <section data-reveal className="rounded-xl border border-fd-border bg-fd-surface p-4">
           <h2 className="text-sm font-semibold text-fd-text">
             Spending by category
           </h2>
@@ -211,7 +218,7 @@ export function Dashboard() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="rounded-xl border border-fd-border bg-fd-glass-5 p-4 lg:col-span-2">
+        <section data-reveal className="rounded-xl border border-fd-border bg-fd-glass-5 p-4 lg:col-span-2">
           <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
             <div>
               <h2 className="text-sm font-semibold text-fd-text">Cash flow</h2>
@@ -375,7 +382,7 @@ export function Dashboard() {
         </section>
       </div>
 
-      <section className="overflow-hidden rounded-xl border border-fd-border bg-fd-glass-5">
+      <section data-reveal className="overflow-hidden rounded-xl border border-fd-border bg-fd-glass-5">
         <div className="border-b border-fd-border px-4 py-3">
           <h2 className="text-sm font-semibold text-fd-text">Recent activity</h2>
           <p className="text-xs text-fd-text-muted">
@@ -427,6 +434,6 @@ export function Dashboard() {
           </div>
         )}
       </section>
-    </div>
+    </RevealOnScroll>
   )
 }

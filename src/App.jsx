@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify'
 import { AppLayout } from './components/AppLayout.jsx'
 import { FinanceProvider } from './context/FinanceContext.jsx'
 import { Dashboard } from './pages/Dashboard.jsx'
+import { Insights } from './pages/Insights.jsx'
 import { Transactions } from './pages/Transactions.jsx'
 
 import 'react-toastify/dist/ReactToastify.css'
@@ -14,6 +15,7 @@ export default function App() {
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Dashboard />} />
+            <Route path="insights" element={<Insights />} />
             <Route path="transactions" element={<Transactions />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

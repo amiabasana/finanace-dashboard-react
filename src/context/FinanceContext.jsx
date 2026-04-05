@@ -19,6 +19,12 @@ const defaultFilters = {
   sortDir: 'desc',
 }
 
+function getSystemTheme() {
+  if (typeof window === 'undefined') return 'light'
+  const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches
+  return prefersDark ? 'dark' : 'light'
+}
+
 function loadStoredTransactions() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -217,16 +223,50 @@ export function FinanceProvider({ children }) {
       : {}),
   }))
 
+  const [theme, setThemeState] = useState(() => {
+    if (uiLoaded?.theme === 'light' || uiLoaded?.theme === 'dark') {
+      return uiLoaded.theme
+    }
+    return getSystemTheme()
+  })
+
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions))
   }, [transactions])
 
   useEffect(() => {
+    document.documentElement.dataset.theme = theme
     localStorage.setItem(
       UI_STORAGE_KEY,
-      JSON.stringify({ role, filters }),
+      JSON.stringify({ role, filters, theme }),
     )
-  }, [role, filters])
+  }, [role, filters, theme])
+
+  useEffect(() => {
+    if (theme !== 'light' && theme !== 'dark') {
+      setThemeState(getSystemTheme())
+    }
+  }, [theme])
+
+  useEffect(() => {
+    if (uiLoaded?.theme === 'light' || uiLoaded?.theme === 'dark') return
+    if (typeof window === 'undefined') return
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = () => {
+      setThemeState(media.matches ? 'dark' : 'light')
+    }
+
+    handleChange()
+
+    if (media.addEventListener) {
+      media.addEventListener('change', handleChange)
+      return () => media.removeEventListener('change', handleChange)
+    }
+
+    media.addListener(handleChange)
+    return () => media.removeListener(handleChange)
+  }, [uiLoaded?.theme])
 
   const setRole = useCallback((next) => {
     setRoleState(next === 'admin' ? 'admin' : 'viewer')
@@ -301,6 +341,10 @@ export function FinanceProvider({ children }) {
     setTransactions([...MOCK_TRANSACTIONS])
   }, [])
 
+  const toggleTheme = useCallback(() => {
+    setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'))
+  }, [])
+
   const value = useMemo(
     () => ({
       transactions,
@@ -317,6 +361,8 @@ export function FinanceProvider({ children }) {
       role,
       setRole,
       isAdmin,
+      theme,
+      toggleTheme,
       addTransaction,
       updateTransaction,
       removeTransaction,

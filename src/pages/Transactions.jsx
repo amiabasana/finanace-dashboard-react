@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { toast } from 'react-toastify'
 import { useFinance } from '../context/FinanceContext.jsx'
 import { DEFAULT_CATEGORIES } from '../data/categories.js'
@@ -75,6 +75,8 @@ export function Transactions() {
   )
   const [editingId, setEditingId] = useState(null)
   const [editDraft, setEditDraft] = useState(null)
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(10)
 
   const formCategories = useMemo(
     () => buildCategorySelectOptions(categoryOptions),
@@ -145,6 +147,23 @@ export function Transactions() {
 
   const showEmptyFiltered =
     transactions.length > 0 && filteredTransactions.length === 0
+
+  const pageCount = Math.max(1, Math.ceil(filteredTransactions.length / pageSize))
+
+  useEffect(() => {
+    if (page > pageCount) {
+      setPage(pageCount)
+    }
+  }, [page, pageCount])
+
+  useEffect(() => {
+    setPage(1)
+  }, [filteredTransactions.length, pageSize])
+
+  const pageRows = useMemo(() => {
+    const start = (page - 1) * pageSize
+    return filteredTransactions.slice(start, start + pageSize)
+  }, [filteredTransactions, page, pageSize])
 
   return (
     <div className="mx-auto flex max-w-full flex-col gap-6">
@@ -369,8 +388,9 @@ export function Transactions() {
             category.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-180 text-left text-sm">
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-180 text-left text-sm">
               <thead>
                 <tr className="border-b border-fd-border text-xs uppercase text-fd-text-muted">
                   <th className="px-4 py-3 font-medium">Date</th>
@@ -384,7 +404,7 @@ export function Transactions() {
                 </tr>
               </thead>
               <tbody>
-                {filteredTransactions.map((t) => {
+                {pageRows.map((t) => {
                   const isEditing = editingId === t.id
                   return (
                     <tr
@@ -548,6 +568,49 @@ export function Transactions() {
               </tbody>
             </table>
           </div>
+          <div className="border-t border-fd-border bg-fd-bg-solid/80 px-4 py-4 sm:flex sm:items-center sm:justify-between">
+            <div className="text-xs text-fd-text-muted">
+              Showing {(page - 1) * pageSize + 1} to {Math.min(filteredTransactions.length, page * pageSize)} of {filteredTransactions.length} transactions
+            </div>
+            <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-0">
+              <button
+                type="button"
+                onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                disabled={page === 1}
+                className="rounded-lg border border-fd-border-light bg-fd-surface px-3 py-1.5 text-xs font-medium text-fd-text-muted transition hover:text-fd-text disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Previous
+              </button>
+              <span className="text-xs text-fd-text-muted">
+                Page {page} of {pageCount}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPage((prev) => Math.min(pageCount, prev + 1))}
+                disabled={page === pageCount}
+                className="rounded-lg border border-fd-border-light bg-fd-surface px-3 py-1.5 text-xs font-medium text-fd-text-muted transition hover:text-fd-text disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Next
+              </button>
+              <label className="inline-flex items-center gap-2 text-xs text-fd-text-muted">
+                Rows per page
+                <select
+                  value={pageSize}
+                  onChange={(e) => {
+                    setPageSize(Number(e.target.value))
+                  }}
+                  className="rounded-lg border border-fd-border-elevated-50 bg-fd-surface px-2 py-1 text-xs text-fd-text focus:border-fd-border-accent focus:outline-none focus:ring-1 focus:ring-fd-accent"
+                >
+                  {[5, 10, 15, 20].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          </div>
+          </>
         )}
       </section>
     </div>
