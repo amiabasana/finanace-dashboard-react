@@ -1,0 +1,72 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Backgrounds */
+  --color-fd-bg: #080c16;
+  --color-fd-bg-solid: #080c16f2;
+  --color-fd-surface: #0b111e;
+  --color-fd-surface-muted: #0b111e80;
+  --color-fd-elevated: #252b37;
+  --color-fd-glass-5: #ffffff05;
+  --color-fd-glass-12: #ffffff0d;
+  --color-fd-glass-26: #ffffff1a;
+  --color-fd-accent: #427cf0;
+  --color-fd-accent-soft: #427cf00d;
+  --color-fd-success-soft: #22c38e0d;
+
+  /* Text */
+  --color-fd-text: #f9fafb;
+  --color-fd-text-muted: #9da3af;
+  --color-fd-text-accent: #427cf0;
+  --color-fd-text-dim: #252b3780;
+  --color-fd-text-inverse: #000000;
+
+  /* Placeholder colors */
+  --color-fd-placeholder: rgba(255,255,255,0.29);
+
+  /* Fills (charts / icons) */
+  --color-fd-fill-muted: #9da3af;
+  --color-fd-fill-dark: #000000;
+
+  /* Borders */
+  --color-fd-border: #ffffff1a;
+  --color-fd-border-light: #ffffff33;
+  --color-fd-border-accent: #427cf033;
+  --color-fd-border-elevated: #252b3766;
+  --color-fd-border-elevated-50: #252b3780;
+  --color-fd-border-elevated-solid: #252b37;
+  --color-fd-border-elevated-muted: #252b374d;
+  --color-fd-border-deep: #080c16;
+
+  --font-sans: ui-sans-serif, system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+/* 
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+} */
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  background-color: var(--color-fd-bg);
+  color: var(--color-fd-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+/* react-toastify on dark shell */
+.Toastify__toast-theme--light {
+  --toastify-color-light: #252b37;
+  --toastify-text-color-light: #f9fafb;
+  --toastify-color-progress-light: #427cf0;
+}
