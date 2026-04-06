@@ -10,42 +10,50 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts'
-import { useFinance } from '../context/FinanceContext.jsx'
-import { RevealOnScroll } from '../components/RevealOnScroll.jsx'
+} from "recharts";
+import { FiArrowDownRight, FiArrowUpRight, FiDollarSign } from "react-icons/fi";
+import { useFinance } from "../context/FinanceContext.jsx";
+import { RevealOnScroll } from "../components/RevealOnScroll.jsx";
 
 const currency = (n) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+  n.toLocaleString("en-US", { style: "currency", currency: "USD" });
 
 const tooltipStyle = {
   contentStyle: {
-    background: '#252b37',
-    border: '1px solid #427cf033',
+    background: "#252b37",
+    border: "1px solid #427cf033",
     borderRadius: 8,
-    color: '#f9fafb',
+    color: "#f9fafb",
   },
-  labelStyle: { color: '#9da3af' },
-}
+  labelStyle: { color: "#9da3af" },
+};
 
-function StatCard({ title, value, accent }) {
+function StatCard({ title, value, accent, icon }) {
   const bg =
-    accent === 'accent'
-      ? 'bg-fd-accent-soft border-fd-border-accent'
-      : accent === 'success'
-        ? 'bg-fd-success-soft border-fd-border'
-        : 'bg-fd-glass-12 border-fd-border'
+    accent === "accent"
+      ? "bg-fd-accent-soft border-fd-border-accent"
+      : accent === "success"
+        ? "bg-fd-success-soft border-fd-border"
+        : "bg-fd-glass-12 border-fd-border";
 
   return (
-    <div className={`rounded-xl border p-4 shadow-sm ${bg} hover:-translate-y-1.5 transition-all duration-300 ease-in-out`}>
-      <p className="text-xs font-medium uppercase tracking-wide text-fd-text-muted">
-        {title}
-      </p>
-      <p className="mt-2 text-2xl font-semibold tabular-nums text-fd-text sm:text-3xl">
-        {value}
-      </p>
+    <div
+      className={`flex rounded-xl border p-4 shadow-sm ${bg} hover:-translate-y-1.5 transition-all duration-300 ease-in-out`}
+    >
+      <div className="flex-1">
+        <p className="text-xs font-medium uppercase tracking-wide text-fd-text-muted">
+          {title}
+        </p>
+        <p className="mt-2 xl:text-2xl lg:text-[20px] font-semibold tabular-nums text-fd-text sm:text-3xl">
+          {value}
+        </p>
+      </div>
+      <div className="h-8 w-8 sm:h-12 sm:w-12 lg:h-14 lg:w-14 rounded-lg sm:rounded-xl lg:rounded-2xl bg-fd-text-accent from-primary/20 to-secondary/20 flex items-center justify-center text-fd-text">
+        {icon}
+      </div>
       {/* {hint ? <p className="mt-1 text-xs text-fd-text-accent">{hint}</p> : null} */}
     </div>
-  )
+  );
 }
 
 function EmptyChart({ message }) {
@@ -53,7 +61,7 @@ function EmptyChart({ message }) {
     <div className="flex h-64 items-center justify-center px-4 text-center text-sm text-fd-text-muted sm:h-72">
       {message}
     </div>
-  )
+  );
 }
 
 export function Dashboard() {
@@ -64,13 +72,13 @@ export function Dashboard() {
     categorySpending,
     transactions,
     insights,
-  } = useFinance()
+  } = useFinance();
 
   const recent = [...transactions]
     .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 5)
+    .slice(0, 5);
 
-  const hasData = transactions.length > 0
+  const hasData = transactions.length > 0;
 
   return (
     <RevealOnScroll className="mx-auto flex max-w-full flex-col gap-6">
@@ -79,19 +87,20 @@ export function Dashboard() {
           className="rounded-xl border border-fd-border-accent bg-fd-accent-soft px-4 py-3 text-sm text-fd-text"
           role="status"
         >
-          No transactions yet. Switch to{' '}
+          No transactions yet. Switch to{" "}
           <strong className="text-fd-text-accent">Admin</strong> and add entries
           on the Transactions page, or load mock data from there.
         </div>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div data-reveal>
           <StatCard
             title="Total balance"
             value={currency(summary.balance)}
             // hint="Income minus expenses (all time)"
             accent="accent"
+            icon={<FiDollarSign className="h-6 w-6" />}
           />
         </div>
         <div data-reveal>
@@ -99,18 +108,23 @@ export function Dashboard() {
             title="Total income"
             value={currency(summary.totalIncome)}
             accent="success"
+            icon={<FiArrowUpRight className="h-6 w-6" />}
           />
         </div>
         <div data-reveal>
           <StatCard
             title="Total expenses"
             value={currency(summary.totalExpense)}
+            icon={<FiArrowDownRight className="h-6 w-6" />}
           />
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section data-reveal className="rounded-xl border border-fd-border bg-fd-glass-5 p-4">
+        <section
+          data-reveal
+          className="rounded-xl border border-fd-border bg-fd-glass-5 p-4"
+        >
           <h2 className="text-sm font-semibold text-fd-text">Balance trend</h2>
           <p className="mt-1 text-xs text-fd-text-muted">
             Running balance by month (cumulative net cash flow)
@@ -131,12 +145,12 @@ export function Dashboard() {
                   />
                   <XAxis
                     dataKey="month"
-                    tick={{ fill: '#9da3af', fontSize: 11 }}
-                    axisLine={{ stroke: '#252b3766' }}
+                    tick={{ fill: "#9da3af", fontSize: 11 }}
+                    axisLine={{ stroke: "#252b3766" }}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fill: '#9da3af', fontSize: 11 }}
+                    tick={{ fill: "#9da3af", fontSize: 11 }}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) =>
@@ -152,7 +166,7 @@ export function Dashboard() {
                     dataKey="balance"
                     stroke="#427cf0"
                     strokeWidth={2}
-                    dot={{ fill: '#427cf0', r: 3 }}
+                    dot={{ fill: "#427cf0", r: 3 }}
                     activeDot={{ r: 5 }}
                   />
                 </LineChart>
@@ -161,7 +175,10 @@ export function Dashboard() {
           </div>
         </section>
 
-        <section data-reveal className="rounded-xl border border-fd-border bg-fd-surface p-4">
+        <section
+          data-reveal
+          className="rounded-xl border border-fd-border bg-fd-surface p-4"
+        >
           <h2 className="text-sm font-semibold text-fd-text">
             Spending by category
           </h2>
@@ -185,8 +202,8 @@ export function Dashboard() {
                   />
                   <XAxis
                     type="number"
-                    tick={{ fill: '#9da3af', fontSize: 11 }}
-                    axisLine={{ stroke: '#252b3766' }}
+                    tick={{ fill: "#9da3af", fontSize: 11 }}
+                    axisLine={{ stroke: "#252b3766" }}
                     tickLine={false}
                     tickFormatter={(v) =>
                       `$${Number(v) >= 1000 ? `${Number(v) / 1000}k` : v}`
@@ -196,7 +213,7 @@ export function Dashboard() {
                     type="category"
                     dataKey="name"
                     width={88}
-                    tick={{ fill: '#9da3af', fontSize: 11 }}
+                    tick={{ fill: "#9da3af", fontSize: 11 }}
                     axisLine={false}
                     tickLine={false}
                   />
@@ -218,7 +235,10 @@ export function Dashboard() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section data-reveal className="rounded-xl border border-fd-border bg-fd-glass-5 p-4 lg:col-span-2">
+        <section
+          data-reveal
+          className="rounded-xl border border-fd-border bg-fd-glass-5 p-4 lg:col-span-2"
+        >
           <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
             <div>
               <h2 className="text-sm font-semibold text-fd-text">Cash flow</h2>
@@ -230,14 +250,14 @@ export function Dashboard() {
               <span className="inline-flex items-center gap-1.5 text-fd-text-muted">
                 <span
                   className="size-2 rounded-full"
-                  style={{ background: '#427cf0' }}
+                  style={{ background: "#427cf0" }}
                 />
                 Income
               </span>
               <span className="inline-flex items-center gap-1.5 text-fd-text-muted">
                 <span
                   className="size-2 rounded-full"
-                  style={{ background: '#9da3af' }}
+                  style={{ background: "#9da3af" }}
                 />
                 Expense
               </span>
@@ -254,7 +274,11 @@ export function Dashboard() {
                 >
                   <defs>
                     <linearGradient id="dash-inc" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#427cf0" stopOpacity={0.35} />
+                      <stop
+                        offset="0%"
+                        stopColor="#427cf0"
+                        stopOpacity={0.35}
+                      />
                       <stop offset="100%" stopColor="#427cf0" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="dash-exp" x1="0" y1="0" x2="0" y2="1">
@@ -269,12 +293,12 @@ export function Dashboard() {
                   />
                   <XAxis
                     dataKey="month"
-                    tick={{ fill: '#9da3af', fontSize: 11 }}
-                    axisLine={{ stroke: '#252b3766' }}
+                    tick={{ fill: "#9da3af", fontSize: 11 }}
+                    axisLine={{ stroke: "#252b3766" }}
                     tickLine={false}
                   />
                   <YAxis
-                    tick={{ fill: '#9da3af', fontSize: 11 }}
+                    tick={{ fill: "#9da3af", fontSize: 11 }}
                     axisLine={false}
                     tickLine={false}
                     tickFormatter={(v) =>
@@ -318,7 +342,7 @@ export function Dashboard() {
               <p className="mt-1 font-semibold text-fd-text">
                 {insights.topCategory
                   ? `${insights.topCategory.name} · ${currency(insights.topCategory.amount)}`
-                  : '—'}
+                  : "—"}
               </p>
             </li>
             <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
@@ -330,29 +354,29 @@ export function Dashboard() {
                   <p>
                     <span className="text-fd-text">
                       {insights.monthCompare.fromLabel}
-                    </span>{' '}
-                    →{' '}
+                    </span>{" "}
+                    →{" "}
                     <span className="text-fd-text">
                       {insights.monthCompare.toLabel}
                     </span>
                   </p>
                   <p>
-                    Expenses:{' '}
+                    Expenses:{" "}
                     <span
                       className={
                         insights.monthCompare.expenseDelta > 0
-                          ? 'text-fd-text'
-                          : 'text-fd-text-accent'
+                          ? "text-fd-text"
+                          : "text-fd-text-accent"
                       }
                     >
-                      {insights.monthCompare.expenseDelta > 0 ? '+' : ''}
+                      {insights.monthCompare.expenseDelta > 0 ? "+" : ""}
                       {currency(insights.monthCompare.expenseDelta)}
                     </span>
                   </p>
                   <p>
-                    Income:{' '}
+                    Income:{" "}
                     <span className="text-fd-text-accent">
-                      {insights.monthCompare.incomeDelta > 0 ? '+' : ''}
+                      {insights.monthCompare.incomeDelta > 0 ? "+" : ""}
                       {currency(insights.monthCompare.incomeDelta)}
                     </span>
                   </p>
@@ -368,10 +392,10 @@ export function Dashboard() {
                 Avg expense (per line item)
               </p>
               <p className="mt-1 font-semibold tabular-nums text-fd-text">
-                {insights.avgExpense > 0 ? currency(insights.avgExpense) : '—'}
+                {insights.avgExpense > 0 ? currency(insights.avgExpense) : "—"}
               </p>
               <p className="mt-1 text-[11px] text-fd-text-dim">
-                {insights.expenseTxCount} expense · {insights.incomeTxCount}{' '}
+                {insights.expenseTxCount} expense · {insights.incomeTxCount}{" "}
                 income records
               </p>
             </li>
@@ -382,9 +406,14 @@ export function Dashboard() {
         </section>
       </div>
 
-      <section data-reveal className="overflow-hidden rounded-xl border border-fd-border bg-fd-glass-5">
+      <section
+        data-reveal
+        className="overflow-hidden rounded-xl border border-fd-border bg-fd-glass-5"
+      >
         <div className="border-b border-fd-border px-4 py-3">
-          <h2 className="text-sm font-semibold text-fd-text">Recent activity</h2>
+          <h2 className="text-sm font-semibold text-fd-text">
+            Recent activity
+          </h2>
           <p className="text-xs text-fd-text-muted">
             Latest five by date (full list on Transactions)
           </p>
@@ -419,12 +448,12 @@ export function Dashboard() {
                     </td>
                     <td
                       className={`px-4 py-3 text-right font-medium tabular-nums ${
-                        t.type === 'income'
-                          ? 'text-fd-text-accent'
-                          : 'text-fd-text'
+                        t.type === "income"
+                          ? "text-fd-text-accent"
+                          : "text-fd-text"
                       }`}
                     >
-                      {t.type === 'income' ? '+' : '-'}
+                      {t.type === "income" ? "+" : "-"}
                       {currency(t.amount)}
                     </td>
                   </tr>
@@ -435,5 +464,5 @@ export function Dashboard() {
         )}
       </section>
     </RevealOnScroll>
-  )
+  );
 }

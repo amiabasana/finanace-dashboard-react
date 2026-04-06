@@ -88,7 +88,7 @@ export function AppLayout() {
           </NavLink>
           <button
             type="button"
-            className="rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:hidden"
+            className="rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:hidden cursor-pointer"
             onClick={() => setMobileOpen(false)}
             aria-label="Close sidebar"
           >
@@ -175,7 +175,7 @@ export function AppLayout() {
         <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-fd-border bg-fd-bg-solid/95 px-4 backdrop-blur-md">
           <button
             type="button"
-            className="rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:hidden"
+            className="rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:hidden cursor-pointer"
             onClick={() => setMobileOpen(true)}
             aria-label="Open menu"
           >
@@ -183,11 +183,11 @@ export function AppLayout() {
           </button>
           <button
             type="button"
-            className="hidden rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:inline-flex"
+            className="hidden rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:inline-flex cursor-pointer"
             onClick={() => setDesktopExpanded((prev) => !prev)}
             aria-label={desktopExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
           >
-            {desktopExpanded ? <FiX className="h-5 w-5" /> : <FiMenu className="h-5 w-5" />}
+            {desktopExpanded ? <FiMenu className="h-5 w-5" /> : <FiX className="h-5 w-5" />}
           </button>
           <div className="min-w-0 flex-1">
             <h1 className="truncate text-base font-semibold text-fd-text sm:text-lg">
@@ -202,7 +202,7 @@ export function AppLayout() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="rounded-lg border border-fd-border-elevated-50 bg-fd-surface p-2 text-fd-text transition hover:bg-fd-glass-12"
+            className="rounded-lg border border-fd-border-elevated-50 bg-fd-surface p-2 text-fd-text transition hover:bg-fd-glass-12 cursor-pointer"
             aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           >
             {theme === 'light' ? (
@@ -219,7 +219,7 @@ export function AppLayout() {
         </main>
         <footer className="border-t border-fd-border px-4 py-4 text-xs text-fd-text-muted bg-fd-bg-solid/90 sm:px-6">
           <div className="mx-auto max-w-full text-center">
-            <p>© {new Date().getFullYear()}  — automatic footer year.</p>
+            <p>© {new Date().getFullYear()}  — Zorvyn FinTech Pvt. Ltd. All rights reserved.</p>
           </div>
         </footer>
       </div>

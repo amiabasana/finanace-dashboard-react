@@ -351,14 +351,14 @@ export function Transactions() {
               <button
                 type="button"
                 onClick={() => exportTransactionsCsv(filteredTransactions)}
-                className="rounded-lg border border-fd-border-light bg-fd-glass-12 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
+                className="rounded-lg border border-fd-border-light bg-fd-glass-26 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
               >
                 Export CSV
               </button>
               <button
                 type="button"
                 onClick={() => exportTransactionsJson(filteredTransactions)}
-                className="rounded-lg border border-fd-border-light bg-fd-glass-12 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
+                className="rounded-lg border border-fd-border-light bg-fd-glass-26 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
               >
                 Export JSON
               </button>
@@ -368,7 +368,7 @@ export function Transactions() {
                   resetToMock()
                   toast.info('Restored mock dataset')
                 }}
-                className="rounded-lg border border-fd-border-light bg-fd-glass-12 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
+                className="rounded-lg border border-fd-border-light bg-fd-glass-26 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
               >
                 Reset to mock data
               </button>

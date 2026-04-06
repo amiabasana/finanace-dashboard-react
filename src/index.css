@@ -94,10 +94,12 @@ a {
   text-decoration: none;
 }
 
+@layer base{
 button {
-  background: none;
-  border: none;
+  @apply border-none;
 }
+}
+
 
 ol,
 ul {
