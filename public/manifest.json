@@ -1,0 +1,16 @@
+{
+  "name": "Finance Dashboard",
+  "short_name": "FinanceDash",
+  "description": "A comprehensive React-based finance dashboard for tracking transactions, insights, and financial data",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#427cf0",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

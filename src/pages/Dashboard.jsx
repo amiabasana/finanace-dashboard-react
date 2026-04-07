@@ -36,19 +36,33 @@ function StatCard({ title, value, accent, icon }) {
         ? "bg-fd-success-soft border-fd-border"
         : "bg-fd-glass-12 border-fd-border";
 
+  const iconBg =
+    accent === "accent"
+      ? "bg-blue-100"
+      : accent === "success"
+        ? "bg-green-100"
+        : "bg-blue-100";
+
+  const iconColor =
+    accent === "accent"
+      ? "text-blue-600"
+      : accent === "success"
+        ? "text-green-600"
+        : "text-blue-600";
+
   return (
     <div
       className={`flex rounded-xl border p-4 shadow-sm ${bg} hover:-translate-y-1.5 transition-all duration-300 ease-in-out`}
     >
       <div className="flex-1">
-        <p className="text-xs font-medium uppercase tracking-wide text-fd-text-muted">
+        <p className="card-title">
           {title}
         </p>
-        <p className="mt-2 xl:text-2xl lg:text-[20px] font-semibold tabular-nums text-fd-text sm:text-3xl">
+        <p className="mt-2 xl:text-3xl lg:text-[20px] font-semibold tabular-nums text-fd-text sm:text-3xl">
           {value}
         </p>
       </div>
-      <div className="h-8 w-8 sm:h-12 sm:w-12 lg:h-14 lg:w-14 rounded-lg sm:rounded-xl lg:rounded-2xl bg-fd-text-accent from-primary/20 to-secondary/20 flex items-center justify-center text-fd-text">
+      <div className={`h-8 w-8 sm:h-12 sm:w-12 lg:h-14 lg:w-14 rounded-lg sm:rounded-xl lg:rounded-2xl ${iconBg} flex items-center justify-center ${iconColor}`}>
         {icon}
       </div>
       {/* {hint ? <p className="mt-1 text-xs text-fd-text-accent">{hint}</p> : null} */}
@@ -125,8 +139,8 @@ export function Dashboard() {
           data-reveal
           className="rounded-xl border border-fd-border bg-fd-glass-5 p-4"
         >
-          <h2 className="text-sm font-semibold text-fd-text">Balance trend</h2>
-          <p className="mt-1 text-xs text-fd-text-muted">
+          <h2 className="text-xl font-semibold text-fd-text">Balance Trend</h2>
+          <p className="mt-0.5 text-sm text-fd-text-muted">
             Running balance by month (cumulative net cash flow)
           </p>
           <div className="mt-4 h-64 w-full min-w-0 sm:h-72">
@@ -179,10 +193,10 @@ export function Dashboard() {
           data-reveal
           className="rounded-xl border border-fd-border bg-fd-surface p-4"
         >
-          <h2 className="text-sm font-semibold text-fd-text">
-            Spending by category
+          <h2 className="text-xl font-semibold text-fd-text">
+            Spending by Category
           </h2>
-          <p className="mt-1 text-xs text-fd-text-muted">
+          <p className="mt-0.5 text-sm text-fd-text-muted">
             Expense totals grouped by category
           </p>
           <div className="mt-4 h-64 w-full min-w-0 sm:h-72">
@@ -241,8 +255,8 @@ export function Dashboard() {
         >
           <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
             <div>
-              <h2 className="text-sm font-semibold text-fd-text">Cash flow</h2>
-              <p className="text-xs text-fd-text-muted">
+              <h2 className="text-xl font-semibold text-fd-text">Cash Flow</h2>
+              <p className="mt-0.5 text-sm text-fd-text-muted">
                 Monthly income vs expenses
               </p>
             </div>
@@ -330,13 +344,13 @@ export function Dashboard() {
         </section>
 
         <section className="rounded-xl border border-fd-border bg-fd-surface p-4">
-          <h2 className="text-sm font-semibold text-fd-text">Insights</h2>
-          <p className="mt-1 text-xs text-fd-text-muted">
+          <h2 className="text-xl font-semibold text-fd-text">Insights</h2>
+          <p className="mt-0.5 text-sm text-fd-text-muted">
             Quick signals from your data
           </p>
           <ul className="mt-4 space-y-3 text-sm">
             <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
-              <p className="text-xs font-medium uppercase text-fd-text-muted">
+              <p className="card-title">
                 Highest spending category
               </p>
               <p className="mt-1 font-semibold text-fd-text">
@@ -346,7 +360,7 @@ export function Dashboard() {
               </p>
             </li>
             <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
-              <p className="text-xs font-medium uppercase text-fd-text-muted">
+              <p className="card-title">
                 Monthly comparison
               </p>
               {insights.monthCompare ? (
@@ -388,13 +402,13 @@ export function Dashboard() {
               )}
             </li>
             <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
-              <p className="text-xs font-medium uppercase text-fd-text-muted">
+              <p className="card-title">
                 Avg expense (per line item)
               </p>
               <p className="mt-1 font-semibold tabular-nums text-fd-text">
                 {insights.avgExpense > 0 ? currency(insights.avgExpense) : "—"}
               </p>
-              <p className="mt-1 text-[11px] text-fd-text-dim">
+              <p className="mt-1 text-[11px] text-fd-text-muted">
                 {insights.expenseTxCount} expense · {insights.incomeTxCount}{" "}
                 income records
               </p>
@@ -411,11 +425,11 @@ export function Dashboard() {
         className="overflow-hidden rounded-xl border border-fd-border bg-fd-glass-5"
       >
         <div className="border-b border-fd-border px-4 py-3">
-          <h2 className="text-sm font-semibold text-fd-text">
-            Recent activity
+          <h2 className="text-xl font-semibold text-fd-text">
+            Recent Activity
           </h2>
-          <p className="text-xs text-fd-text-muted">
-            Latest five by date (full list on Transactions)
+          <p className="mt-0.5 text-sm text-fd-text-muted">
+            Latest five by date (Full list on transactions)
           </p>
         </div>
         {recent.length === 0 ? (

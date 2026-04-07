@@ -15,8 +15,8 @@ export default function App() {
         <Routes>
           <Route element={<AppLayout />}>
             <Route index element={<Dashboard />} />
-            <Route path="insights" element={<Insights />} />
             <Route path="transactions" element={<Transactions />} />
+            <Route path="insights" element={<Insights />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

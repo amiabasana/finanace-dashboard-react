@@ -17,8 +17,8 @@ const dashboardLinks = [
 ]
 
 const pageLinks = [
-  { to: '/insights', label: 'Insights', end: false, icon: FiBarChart2 },
   { to: '/transactions', label: 'Transactions', end: false, icon: FiList },
+  { to: '/insights', label: 'Insights', end: false, icon: FiBarChart2 },
 ]
 
 export function AppLayout() {
@@ -153,10 +153,10 @@ export function AppLayout() {
         </nav>
 
         <div className={`border-t border-fd-border p-3 ${desktopExpanded ? '' : 'px-0 text-center'}`}>
-          <p className={`text-xs font-semibold text-fd-text ${desktopExpanded ? '' : 'sr-only'}`}>
+          <p className={`text-sm font-semibold text-fd-text ${desktopExpanded ? '' : 'sr-only'}`}>
             Amisha Abasana
           </p>
-          <p className={`mt-1 text-[11px] text-fd-text-muted ${desktopExpanded ? '' : 'sr-only'}`}>
+          <p className={`mt-0.5 text-2xs text-fd-text-muted ${desktopExpanded ? '' : 'sr-only'}`}>
             {isAdmin ? 'Administrator' : 'Viewer access'}
           </p>
           {!desktopExpanded ? (
@@ -219,7 +219,7 @@ export function AppLayout() {
         </main>
         <footer className="border-t border-fd-border px-4 py-4 text-xs text-fd-text-muted bg-fd-bg-solid/90 sm:px-6">
           <div className="mx-auto max-w-full text-center">
-            <p>© {new Date().getFullYear()}  — Zorvyn FinTech Pvt. Ltd. All rights reserved.</p>
+            <p className='text-base'>© {new Date().getFullYear()}  — Zorvyn FinTech Pvt. Ltd. All rights reserved.</p>
           </div>
         </footer>
       </div>

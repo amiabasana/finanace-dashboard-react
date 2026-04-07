@@ -25,7 +25,7 @@ export function Insights() {
 
       <div className="grid gap-4 lg:grid-cols-3">
         <article data-reveal className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-fd-text-muted">
+          <p className="card-title">
             Highest spending category
           </p>
           <p className="mt-3 text-3xl font-semibold text-fd-text">
@@ -39,7 +39,7 @@ export function Insights() {
         </article>
 
         <article data-reveal className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-fd-text-muted">
+          <p className="card-title">
             Monthly comparison
           </p>
           {insights.monthCompare ? (
@@ -71,7 +71,7 @@ export function Insights() {
         </article>
 
         <article data-reveal className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-fd-text-muted">
+          <p className="card-title">
             Useful observation
           </p>
           <p className="mt-4 text-sm leading-7 text-fd-text-muted">
@@ -82,13 +82,13 @@ export function Insights() {
 
       <section data-reveal className="grid gap-4 lg:grid-cols-2">
         <div className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
-          <h2 className="text-sm font-semibold text-fd-text">Transaction snapshot</h2>
+          <h2 className="card-title">Transaction snapshot</h2>
           <p className="mt-2 text-sm text-fd-text-muted">
             {insights.expenseTxCount} expense records and {insights.incomeTxCount} income records.
           </p>
         </div>
         <div className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
-          <h2 className="text-sm font-semibold text-fd-text">Average expense</h2>
+          <h2 className="card-title">Average expense</h2>
           <p className="mt-2 text-3xl font-semibold text-fd-text">
             {insights.avgExpense > 0 ? currency(insights.avgExpense) : '—'}
           </p>
