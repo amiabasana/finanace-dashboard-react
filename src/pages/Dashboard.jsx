@@ -58,7 +58,7 @@ function StatCard({ title, value, accent, icon }) {
         <p className="card-title">
           {title}
         </p>
-        <p className="mt-2 xl:text-3xl lg:text-[20px] font-semibold tabular-nums text-fd-text sm:text-3xl">
+        <p className="mt-2 xl:text-3xl md:text-xl font-semibold tabular-nums text-fd-text sm:text-xl">
           {value}
         </p>
       </div>
@@ -107,7 +107,7 @@ export function Dashboard() {
         </div>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
         <div data-reveal>
           <StatCard
             title="Total balance"
@@ -134,7 +134,7 @@ export function Dashboard() {
         </div>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <section
           data-reveal
           className="rounded-xl border border-fd-border bg-fd-glass-5 p-4"
@@ -348,8 +348,8 @@ export function Dashboard() {
           <p className="mt-0.5 text-sm text-fd-text-muted">
             Quick signals from your data
           </p>
-          <ul className="mt-4 space-y-3 text-sm">
-            <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
+          <ul className="mt-4 space-y-3 text-sm grid md:grid-cols-3 md:gap-3 lg:block sm:grid-cols-2 sm:gap-2">
+            <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3 lg:mb-3 mb-0">
               <p className="card-title">
                 Highest spending category
               </p>
@@ -359,7 +359,7 @@ export function Dashboard() {
                   : "—"}
               </p>
             </li>
-            <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
+            <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3 lg:mb-3 mb-0">
               <p className="card-title">
                 Monthly comparison
               </p>
@@ -401,7 +401,7 @@ export function Dashboard() {
                 </p>
               )}
             </li>
-            <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3">
+            <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3 lg:mb-3 mb-0">
               <p className="card-title">
                 Avg expense (per line item)
               </p>
@@ -413,7 +413,7 @@ export function Dashboard() {
                 income records
               </p>
             </li>
-            <li className="border-t border-fd-border-elevated-muted pt-3 text-xs leading-relaxed text-fd-text-muted">
+            <li className="border-t border-fd-border-elevated-muted pt-3 text-xs leading-relaxed text-fd-text-muted col-start-1 col-end-4">
               {insights.observation}
             </li>
           </ul>

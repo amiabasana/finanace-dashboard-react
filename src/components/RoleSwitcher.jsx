@@ -12,8 +12,8 @@ export function RoleSwitcher() {
         className="max-w-36 rounded-lg border border-fd-border-elevated-50 bg-fd-surface px-2 py-1.5 text-xs font-medium text-fd-text focus:border-fd-border-accent focus:outline-none focus:ring-1 focus:ring-fd-accent sm:max-w-none sm:text-sm cursor-pointer"
         aria-describedby="role-hint"
       >
-        <option value="viewer">Viewer (read-only)</option>
-        <option value="admin">Admin (edit)</option>
+        <option value="viewer">Viewer (Read-only)</option>
+        <option value="admin">Admin (Edit)</option>
       </select>
       <span
         id="role-hint"

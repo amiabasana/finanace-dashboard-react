@@ -383,6 +383,7 @@ export function FinanceProvider({ children }) {
       role,
       setRole,
       isAdmin,
+      theme,
       addTransaction,
       updateTransaction,
       removeTransaction,

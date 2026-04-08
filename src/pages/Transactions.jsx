@@ -175,7 +175,7 @@ export function Transactions() {
             className="mt-4 grid gap-3 sm:grid-cols-3 lg:grid-cols-8 xl:grid-cols-12 lg:items-end"
           >
             <label className="flex flex-col gap-1 lg:col-span-3">
-              <span className="text-xs text-fd-text-muted">Description</span>
+              <span className="text-sm text-fd-text-muted">Description</span>
               <input
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -184,7 +184,7 @@ export function Transactions() {
               />
             </label>
             <label className="flex flex-col gap-1 lg:col-span-2">
-              <span className="text-xs text-fd-text-muted">Amount (USD)</span>
+              <span className="text-sm text-fd-text-muted">Amount (USD)</span>
               <input
                 type="number"
                 min="0"
@@ -196,7 +196,7 @@ export function Transactions() {
               />
             </label>
             <label className="flex flex-col gap-1 lg:col-span-2">
-              <span className="text-xs text-fd-text-muted">Type</span>
+              <span className="text-sm text-fd-text-muted">Type</span>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
@@ -211,7 +211,7 @@ export function Transactions() {
               </select>
             </label>
             <label className="flex flex-col gap-1 lg:col-span-2">
-              <span className="text-xs text-fd-text-muted">Category</span>
+              <span className="text-sm text-fd-text-muted">Category</span>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
@@ -225,7 +225,7 @@ export function Transactions() {
               </select>
             </label>
             <label className="flex flex-col gap-1 lg:col-span-2">
-              <span className="text-xs text-fd-text-muted">Date</span>
+              <span className="text-sm text-fd-text-muted">Date</span>
               <input
                 type="date"
                 value={date}
@@ -236,7 +236,7 @@ export function Transactions() {
             <div className="flex items-end gap-2 lg:col-span-1">
               <button
                 type="submit"
-                className="w-full sm:w-auto lg:w-full rounded-lg bg-fd-accent px-4 py-2 text-sm font-medium text-fd-text transition hover:opacity-90 cursor-pointer"
+                className="w-full sm:w-auto lg:w-full rounded-lg bg-fd-accent px-4 py-2 text-sm font-medium text-white transition hover:opacity-90 cursor-pointer"
               >
                 Add
               </button>
@@ -245,7 +245,7 @@ export function Transactions() {
         </section>
       ) : (
         <div
-          className="rounded-xl border border-fd-border bg-fd-glass-12 px-4 py-3 text-sm text-fd-text-muted"
+          className="rounded-xl border border-fd-border bg-fd-success-soft px-4 py-3 text-sm text-fd-text-muted"
           role="note"
         >
           You are in <strong className="text-fd-text">Viewer</strong> mode —
@@ -277,7 +277,7 @@ export function Transactions() {
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           <label className="flex flex-col gap-1 lg:col-span-2">
-            <span className="text-xs text-fd-text-muted">Search</span>
+            <span className="text-sm text-fd-text-muted">Search</span>
             <input
               value={filters.search}
               onChange={(e) => setFilters({ search: e.target.value })}
@@ -286,7 +286,7 @@ export function Transactions() {
             />
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-xs text-fd-text-muted">Type</span>
+            <span className="text-sm text-fd-text-muted">Type</span>
             <select
               value={filters.typeFilter}
               onChange={(e) => setFilters({ typeFilter: e.target.value })}
@@ -298,7 +298,7 @@ export function Transactions() {
             </select>
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-xs text-fd-text-muted">Category</span>
+            <span className="text-sm text-fd-text-muted">Category</span>
             <select
               value={filters.categoryFilter}
               onChange={(e) => setFilters({ categoryFilter: e.target.value })}
@@ -312,7 +312,7 @@ export function Transactions() {
             </select>
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-xs text-fd-text-muted">Sort by</span>
+            <span className="text-sm text-fd-text-muted">Sort by</span>
             <select
               value={filters.sortBy}
               onChange={(e) => setFilters({ sortBy: e.target.value })}
@@ -325,7 +325,7 @@ export function Transactions() {
             </select>
           </label>
           <label className="flex flex-col gap-1">
-            <span className="text-xs text-fd-text-muted">Direction</span>
+            <span className="text-sm text-fd-text-muted">Direction</span>
             <select
               value={filters.sortDir}
               onChange={(e) => setFilters({ sortDir: e.target.value })}
@@ -514,10 +514,10 @@ export function Transactions() {
                             </>
                           ) : (
                             <>
-                              <td className="px-4 py-3 tabular-nums text-fd-text-muted">
+                              <td className="px-4 py-3 tabular-nums text-fd-text-muted transaction-ellipsis">
                                 {t.date}
                               </td>
-                              <td className="px-4 py-3 text-fd-text">
+                              <td className="px-4 py-3 text-fd-text transaction-ellipsis">
                                 {t.description}
                               </td>
                               <td className="px-4 py-3 text-fd-text-muted">
@@ -535,7 +535,7 @@ export function Transactions() {
                                 </span>
                               </td>
                               <td
-                                className={`px-4 py-3 text-right font-medium tabular-nums ${
+                                className={`px-4 py-3 text-right font-medium tabular-nums transaction-ellipsis ${
                                   t.type === "income"
                                     ? "text-fd-text-accent"
                                     : "text-fd-text"
@@ -575,13 +575,13 @@ export function Transactions() {
                   </tbody>
                 </table>
               </div>
-              <div className="border-t border-fd-border bg-fd-bg-solid/80 px-4 py-4 sm:flex sm:items-center sm:justify-between">
-                <div className="text-xs text-fd-text-muted">
+              <div className="border-t border-fd-border bg-fd-bg-solid/80 px-4 py-4 flex items-center justify-center flex-wrap sm:flex-nowrap sm:justify-between gap-1">
+                <div className="text-sm text-fd-text-muted">
                   Showing {(page - 1) * pageSize + 1} to{" "}
                   {Math.min(filteredTransactions.length, page * pageSize)} of{" "}
                   {filteredTransactions.length} transactions
                 </div>
-                <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-0">
+                <div className="mt-3 flex flex-wrap items-center gap-2 sm:mt-0 md:justify-start sm:justify-end justify-center">
                   <button
                     type="button"
                     onClick={() => setPage((prev) => Math.max(1, prev - 1))}
@@ -590,7 +590,7 @@ export function Transactions() {
                   >
                     Previous
                   </button>
-                  <span className="text-xs text-fd-text-muted">
+                  <span className="text-sm text-fd-text-muted">
                     Page {page} of {pageCount}
                   </span>
                   <button
@@ -603,7 +603,7 @@ export function Transactions() {
                   >
                     Next
                   </button>
-                  <label className="inline-flex items-center gap-2 text-xs text-fd-text-muted">
+                  <label className="inline-flex items-center gap-2 text-sm text-fd-text-muted">
                     Rows per page
                     <select
                       value={pageSize}

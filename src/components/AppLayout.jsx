@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
+  FiArrowUp,
   FiBarChart2,
   FiHome,
   FiList,
@@ -27,10 +28,17 @@ export function AppLayout() {
   const { theme, toggleTheme, isAdmin } = useFinance()
   const location = useLocation()
   const sidebarCollapsed = !desktopExpanded
+  const [showScroll, setShowScroll] = useState(false)
+  const mainRef = useRef(null)
 
   const roleBadgeClass = isAdmin
     ? 'bg-fd-accent-soft text-fd-text-accent border border-fd-border-accent'
     : 'bg-fd-glass-5 text-fd-text-muted border border-fd-border'
+
+  const handleMainScroll = () => {
+    if (!mainRef.current) return
+    setShowScroll(mainRef.current.scrollTop > 300)
+  }
 
   const pageTitle = (() => {
     switch (location.pathname) {
@@ -50,6 +58,8 @@ export function AppLayout() {
         ? 'bg-fd-accent-soft text-fd-text-accent border border-fd-border-accent'
         : 'text-fd-text-muted hover:bg-fd-glass-12 hover:text-fd-text border border-transparent',
     ].join(' ')
+
+    console.log(theme);
 
   return (
     <div className="flex min-h-dvh bg-fd-bg text-fd-text">
@@ -214,12 +224,20 @@ export function AppLayout() {
           <RoleSwitcher />
         </header>
 
-        <main className="flex-1 overflow-auto p-4 sm:p-6">
+        <main ref={mainRef} onScroll={handleMainScroll} className="flex-1 overflow-auto p-4 sm:p-6">
           <Outlet />
         </main>
+        <button
+          type="button"
+          onClick={() => mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
+          aria-label="Scroll to top"
+          className={`fixed bottom-6 right-6 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-fd-border bg-fd-border-elevated-muted text-fd-text transition duration-300 hover:bg-fd-glass-12 focus:outline-none focus:ring-2 focus:ring-fd-accent sm:bottom-8 sm:right-8 ${showScroll ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        >
+          <FiArrowUp className="h-5 w-5" />
+        </button>
         <footer className="border-t border-fd-border px-4 py-4 text-xs text-fd-text-muted bg-fd-bg-solid/90 sm:px-6">
           <div className="mx-auto max-w-full text-center">
-            <p className='text-base'>© {new Date().getFullYear()}  — Zorvyn FinTech Pvt. Ltd. All rights reserved.</p>
+            <p className='md:text-base text-sm'>© {new Date().getFullYear()}  — Zorvyn FinTech Pvt. Ltd. All rights reserved.</p>
           </div>
         </footer>
       </div>

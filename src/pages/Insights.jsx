@@ -18,20 +18,20 @@ export function Insights() {
             </p>
           </div>
           <div className="rounded-2xl bg-fd-glass-12 px-4 py-3 text-sm text-fd-text-muted">
-            Total balance: <span className="text-fd-text font-semibold">{currency(summary.balance)}</span>
+            Total balance: <span className="text-fd-text font-semibold lg:text-base">{currency(summary.balance)}</span>
           </div>
         </div>
       </section>
 
-      <div className="grid gap-4 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3 sm:grid-cols-2">
         <article data-reveal className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
           <p className="card-title">
             Highest spending category
           </p>
-          <p className="mt-3 text-3xl font-semibold text-fd-text">
-            {insights.topCategory ? insights.topCategory.name : 'No data yet'}
+          <p className="mt-3 sm:text-3xl text-2xl font-semibold text-fd-text">
+            {insights.topCategory ? insights.topCategory.name : 'No Data'}
           </p>
-          <p className="mt-2 text-sm text-fd-text-accent">
+          <p className="mt-2 text-sm text-fd-text-accent xl:text-2xl lg:text-xl">
             {insights.topCategory
               ? currency(insights.topCategory.amount)
               : 'Add expense transactions to see results.'}
@@ -70,7 +70,7 @@ export function Insights() {
           )}
         </article>
 
-        <article data-reveal className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
+        <article data-reveal className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5 sm:col-start-1 sm:col-end-3 md:col-start-auto md:col-end-auto">
           <p className="card-title">
             Useful observation
           </p>
@@ -80,16 +80,16 @@ export function Insights() {
         </article>
       </div>
 
-      <section data-reveal className="grid gap-4 lg:grid-cols-2">
+      <section data-reveal className="grid gap-4 sm:grid-cols-2">
         <div className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
           <h2 className="card-title">Transaction snapshot</h2>
-          <p className="mt-2 text-sm text-fd-text-muted">
+          <p className="mt-2 text-sm text-fd-text-dim">
             {insights.expenseTxCount} expense records and {insights.incomeTxCount} income records.
           </p>
         </div>
         <div className="rounded-3xl border border-fd-border bg-fd-glass-5 p-5">
           <h2 className="card-title">Average expense</h2>
-          <p className="mt-2 text-3xl font-semibold text-fd-text">
+          <p className="mt-2 xl:text-2xl lg:text-xl text-lg font-semibold text-fd-text">
             {insights.avgExpense > 0 ? currency(insights.avgExpense) : '—'}
           </p>
           <p className="mt-2 text-sm text-fd-text-muted">

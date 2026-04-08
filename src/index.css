@@ -39,7 +39,7 @@
   --color-fd-text: #f9fafb;
   --color-fd-text-muted: #9da3af;
   --color-fd-text-accent: #427cf0;
-  --color-fd-text-dim: #252b3780;
+  --color-fd-text-dim: #b1bacd80;
   --color-fd-text-inverse: #000000;
 
   /* Placeholder colors */
@@ -106,7 +106,7 @@
   }
 
   ::-webkit-scrollbar-track{
-    background: transparent;
+    background: var(--color-fd-accent-soft);
   }
 
   ::-webkit-scrollbar-thumb{
@@ -188,6 +188,9 @@ textarea::placeholder {
 
 .card-value {
   @apply text-3xl font-semibold text-fd-text;
+}
+.transaction-ellipsis{
+  @apply max-w-32 overflow-hidden whitespace-nowrap text-ellipsis;
 }
 
 html[data-theme="light"] {
