@@ -1,11 +1,14 @@
+import { memo, useMemo } from 'react'
 import { useFinance } from '../context/FinanceContext.jsx'
 import { RevealOnScroll } from '../components/RevealOnScroll.jsx'
 
 const currency = (n) =>
   n.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 
-export function Insights() {
+export const Insights = memo(function Insights() {
   const { insights, summary } = useFinance()
+
+  const balanceDisplay = useMemo(() => currency(summary.balance), [summary.balance])
 
   return (
     <RevealOnScroll className="mx-auto flex max-w-full flex-col gap-6">
@@ -18,7 +21,7 @@ export function Insights() {
             </p>
           </div>
           <div className="rounded-2xl bg-fd-glass-12 px-4 py-3 text-sm text-fd-text-muted">
-            Total balance: <span className="text-fd-text font-semibold lg:text-base">{currency(summary.balance)}</span>
+            Total balance: <span className="text-fd-text font-semibold lg:text-base">{balanceDisplay}</span>
           </div>
         </div>
       </section>
@@ -99,4 +102,4 @@ export function Insights() {
       </section>
     </RevealOnScroll>
   )
-}
+})

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useMemo, useEffect, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import {
   FiArrowUp,
@@ -12,6 +12,7 @@ import {
 } from 'react-icons/fi'
 import { RoleSwitcher } from './RoleSwitcher.jsx'
 import { useFinance } from '../context/FinanceContext.jsx'
+import Footer from './Footer.jsx'
 
 const dashboardLinks = [
   { to: '/', label: 'Finance', end: true, icon: FiHome },
@@ -22,25 +23,63 @@ const pageLinks = [
   { to: '/insights', label: 'Insights', end: false, icon: FiBarChart2 },
 ]
 
+// Memoized NavLink component
+const NavItem = memo(function NavItem({ item, isActive, linkClass, desktopExpanded, onNavClick }) {
+  const Icon = item.icon
+  return (
+    <NavLink
+      to={item.to}
+      end={item.end}
+      className={({ isActive }) =>
+        linkClass({ isActive }) +
+        (desktopExpanded ? '' : ' justify-center px-2')
+      }
+      onClick={onNavClick}
+      title={item.label}
+    >
+      <Icon className="h-5 w-5 shrink-0" />
+      <span className={`${desktopExpanded ? 'inline' : 'hidden'}`}>{item.label}</span>
+    </NavLink>
+  )
+})
+
 export function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [desktopExpanded, setDesktopExpanded] = useState(true)
   const { theme, toggleTheme, isAdmin } = useFinance()
   const location = useLocation()
-  const sidebarCollapsed = !desktopExpanded
   const [showScroll, setShowScroll] = useState(false)
   const mainRef = useRef(null)
 
-  const roleBadgeClass = isAdmin
-    ? 'bg-fd-accent-soft text-fd-text-accent border border-fd-border-accent'
-    : 'bg-fd-glass-5 text-fd-text-muted border border-fd-border'
+  const roleBadgeClass = useMemo(
+    () => isAdmin
+      ? 'bg-fd-accent-soft text-fd-text-accent border border-fd-border-accent'
+      : 'bg-fd-glass-5 text-fd-text-muted border border-fd-border',
+    [isAdmin]
+  )
 
-  const handleMainScroll = () => {
+  const handleMainScroll = useCallback(() => {
     if (!mainRef.current) return
     setShowScroll(mainRef.current.scrollTop > 300)
-  }
+  }, [])
 
-  const pageTitle = (() => {
+  const handleMobileOpen = useCallback(() => {
+    setMobileOpen(true)
+  }, [])
+
+  const handleMobileClose = useCallback(() => {
+    setMobileOpen(false)
+  }, [])
+
+  const handleToggleSidebar = useCallback(() => {
+    setDesktopExpanded((prev) => !prev)
+  }, [])
+
+  const handleScrollToTop = useCallback(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
+
+  const pageTitle = useMemo(() => {
     switch (location.pathname) {
       case '/transactions':
         return 'Transactions'
@@ -49,17 +88,40 @@ export function AppLayout() {
       default:
         return 'Finance dashboard'
     }
-  })()
+  }, [location.pathname])
 
-  const linkClass = ({ isActive }) =>
+  const pageDescription = useMemo(() => {
+    if (pageTitle === 'Finance dashboard') {
+      return 'Track cash flow, spending, and account activity'
+    }
+    return `Review the latest ${pageTitle.toLowerCase()} information`
+  }, [pageTitle])
+
+  const linkClass = useCallback(({ isActive }) =>
     [
-      'flex gap-[12px] rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+      'flex gap-[12px] rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150',
       isActive
         ? 'bg-fd-accent-soft text-fd-text-accent border border-fd-border-accent'
-        : 'text-fd-text-muted hover:bg-fd-glass-12 hover:text-fd-text border border-transparent',
-    ].join(' ')
+        : 'text-fd-text-muted hover:bg-fd-accent-soft hover:text-fd-text-accent border border-transparent',
+    ].join(' '),
+    []
+  )
 
-    console.log(theme);
+  const asideClassName = useMemo(
+    () => [
+      'fixed inset-y-0 left-0 z-50 flex flex-col border-r border-fd-border bg-fd-bg-solid backdrop-blur-md transition-all duration-200',
+      desktopExpanded ? 'w-64' : 'w-20',
+      mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
+    ].join(' '),
+    [desktopExpanded, mobileOpen]
+  )
+
+  const mainClassName = useMemo(
+    () => `flex min-w-0 flex-1 flex-col transition-all duration-200 ${
+      desktopExpanded ? 'lg:pl-64' : 'lg:pl-20'
+    }`,
+    [desktopExpanded]
+  )
 
   return (
     <div className="flex min-h-dvh bg-fd-bg text-fd-text">
@@ -68,22 +130,16 @@ export function AppLayout() {
           type="button"
           className="fixed inset-0 z-40 bg-fd-surface-muted lg:hidden"
           aria-label="Close menu"
-          onClick={() => setMobileOpen(false)}
+          onClick={handleMobileClose}
         />
       ) : null}
 
-      <aside
-        className={[
-          'fixed inset-y-0 left-0 z-50 flex flex-col border-r border-fd-border bg-fd-bg-solid backdrop-blur-md transition-all duration-200',
-          desktopExpanded ? 'w-64' : 'w-20',
-          mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
-        ].join(' ')}
-      >
+      <aside className={asideClassName}>
         <div className="flex h-16 items-center justify-between gap-2 border-b border-fd-border px-4">
           <NavLink
             to="/"
             className={`flex items-center gap-2 ${desktopExpanded ? '' : 'justify-center w-full'}`}
-            onClick={() => setMobileOpen(false)}
+            onClick={handleMobileClose}
           >
             <div className="flex size-9 items-center justify-center rounded-lg bg-fd-accent-soft text-sm font-bold text-fd-text-accent">
               ZV
@@ -91,7 +147,7 @@ export function AppLayout() {
             {desktopExpanded ? (
               <div className="text-left">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-fd-text">Zorvyn</p>
+                  <p className="text-sm font-semibold text-fd-text">Fido</p>
                 </div>
               </div>
             ) : null}
@@ -99,7 +155,7 @@ export function AppLayout() {
           <button
             type="button"
             className="rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:hidden cursor-pointer"
-            onClick={() => setMobileOpen(false)}
+            onClick={handleMobileClose}
             aria-label="Close sidebar"
           >
             <FiX className="h-5 w-5" />
@@ -108,56 +164,36 @@ export function AppLayout() {
 
         <nav className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 py-3">
           <div>
-            <p className={`px-3 pb-2 text-[11px] uppercase tracking-[0.25em] text-fd-text-muted ${desktopExpanded ? 'block' : 'hidden'}`}>
+            <p className={`px-3 pb-2 text-3xs uppercase tracking-[0.25em] text-fd-text-muted ${desktopExpanded ? 'block' : 'hidden'}`}>
               Dashboard
             </p>
             <div className="space-y-1">
-              {dashboardLinks.map((item) => {
-                const Icon = item.icon
-                return (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    end={item.end}
-                    className={({ isActive }) =>
-                      linkClass({ isActive }) +
-                      (desktopExpanded ? '' : ' justify-center px-2')
-                    }
-                    onClick={() => setMobileOpen(false)}
-                    title={item.label}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    <span className={`${desktopExpanded ? 'inline' : 'hidden'}`}>{item.label}</span>
-                  </NavLink>
-                )
-              })}
+              {dashboardLinks.map((item) => (
+                <NavItem
+                  key={item.to}
+                  item={item}
+                  linkClass={linkClass}
+                  desktopExpanded={desktopExpanded}
+                  onNavClick={handleMobileClose}
+                />
+              ))}
             </div>
           </div>
 
           <div>
-            <p className={`px-3 pb-2 text-[11px] uppercase tracking-[0.25em] text-fd-text-muted ${desktopExpanded ? 'block' : 'hidden'}`}>
+            <p className={`px-3 pb-2 text-3xs uppercase tracking-[0.25em] text-fd-text-muted ${desktopExpanded ? 'block' : 'hidden'}`}>
               Pages
             </p>
             <div className="space-y-1">
-              {pageLinks.map((item) => {
-                const Icon = item.icon
-                return (
-                  <NavLink
-                    key={item.to}
-                    to={item.to}
-                    end={item.end}
-                    className={({ isActive }) =>
-                      linkClass({ isActive }) +
-                      (desktopExpanded ? '' : ' justify-center px-2')
-                    }
-                    onClick={() => setMobileOpen(false)}
-                    title={item.label}
-                  >
-                    <Icon className="h-5 w-5 shrink-0" />
-                    <span className={`${desktopExpanded ? 'inline' : 'hidden'}`}>{item.label}</span>
-                  </NavLink>
-                )
-              })}
+              {pageLinks.map((item) => (
+                <NavItem
+                  key={item.to}
+                  item={item}
+                  linkClass={linkClass}
+                  desktopExpanded={desktopExpanded}
+                  onNavClick={handleMobileClose}
+                />
+              ))}
             </div>
           </div>
         </nav>
@@ -177,16 +213,12 @@ export function AppLayout() {
         </div>
       </aside>
 
-      <div
-        className={`flex min-w-0 flex-1 flex-col transition-all duration-200 ${
-          desktopExpanded ? 'lg:pl-64' : 'lg:pl-20'
-        }`}
-      >
+      <div className={mainClassName}>
         <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-fd-border bg-fd-bg-solid/95 px-4 backdrop-blur-md">
           <button
             type="button"
             className="rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:hidden cursor-pointer"
-            onClick={() => setMobileOpen(true)}
+            onClick={handleMobileOpen}
             aria-label="Open menu"
           >
             <FiMenu className="h-5 w-5" />
@@ -194,7 +226,7 @@ export function AppLayout() {
           <button
             type="button"
             className="hidden rounded-lg p-2 text-fd-text-muted hover:bg-fd-glass-12 lg:inline-flex cursor-pointer"
-            onClick={() => setDesktopExpanded((prev) => !prev)}
+            onClick={handleToggleSidebar}
             aria-label={desktopExpanded ? 'Collapse sidebar' : 'Expand sidebar'}
           >
             {desktopExpanded ? <FiMenu className="h-5 w-5" /> : <FiX className="h-5 w-5" />}
@@ -204,9 +236,7 @@ export function AppLayout() {
               {pageTitle}
             </h1>
             <p className="hidden text-xs text-fd-text-muted sm:block">
-              {pageTitle === 'Finance dashboard'
-                ? 'Track cash flow, spending, and account activity'
-                : `Review the latest ${pageTitle.toLowerCase()} information`}
+              {pageDescription}
             </p>
           </div>
           <button
@@ -229,17 +259,14 @@ export function AppLayout() {
         </main>
         <button
           type="button"
-          onClick={() => mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={handleScrollToTop}
           aria-label="Scroll to top"
           className={`fixed bottom-6 right-6 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-fd-border bg-fd-border-elevated-muted text-fd-text transition duration-300 hover:bg-fd-glass-12 focus:outline-none focus:ring-2 focus:ring-fd-accent sm:bottom-8 sm:right-8 ${showScroll ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         >
           <FiArrowUp className="h-5 w-5" />
         </button>
-        <footer className="border-t border-fd-border px-4 py-4 text-xs text-fd-text-muted bg-fd-bg-solid/90 sm:px-6">
-          <div className="mx-auto max-w-full text-center">
-            <p className='md:text-base text-sm'>© {new Date().getFullYear()}  — Zorvyn FinTech Pvt. Ltd. All rights reserved.</p>
-          </div>
-        </footer>
+        {/* Footer */}
+        <Footer/>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { useFinance } from "../context/FinanceContext.jsx";
 import { DEFAULT_CATEGORIES } from "../data/categories.js";
@@ -84,7 +84,7 @@ export function Transactions() {
     });
   }, [categoryOptions]);
 
-  function handleAdd(e) {
+  const handleAdd = useCallback((e) => {
     e.preventDefault();
     const n = Number.parseFloat(amount);
     if (!description.trim() || Number.isNaN(n) || n <= 0) {
@@ -101,9 +101,9 @@ export function Transactions() {
     toast.success("Transaction saved");
     setDescription("");
     setAmount("");
-  }
+  }, [amount, date, description, category, type, addTransaction]);
 
-  function startEdit(t) {
+  const startEdit = useCallback((t) => {
     setEditingId(t.id);
     setEditDraft({
       date: t.date,
@@ -112,14 +112,14 @@ export function Transactions() {
       type: t.type,
       amount: String(t.amount),
     });
-  }
+  }, []);
 
-  function cancelEdit() {
+  const cancelEdit = useCallback(() => {
     setEditingId(null);
     setEditDraft(null);
-  }
+  }, []);
 
-  function saveEdit() {
+  const saveEdit = useCallback(() => {
     if (!editDraft || !editingId) return;
     const n = Number.parseFloat(editDraft.amount);
     if (!editDraft.description.trim() || Number.isNaN(n) || n <= 0) {
@@ -135,7 +135,25 @@ export function Transactions() {
     });
     toast.success("Transaction updated");
     cancelEdit();
-  }
+  }, [editDraft, editingId, updateTransaction, cancelEdit]);
+
+  const handleResetFilters = useCallback(() => {
+    resetFilters();
+    toast.info("Filters reset");
+  }, [resetFilters]);
+
+  const handleResetToMock = useCallback(() => {
+    resetToMock();
+    toast.info("Restored dataset");
+  }, [resetToMock]);
+
+  const handleExportCsv = useCallback(() => {
+    exportTransactionsCsv(filteredTransactions);
+  }, [filteredTransactions]);
+
+  const handleExportJson = useCallback(() => {
+    exportTransactionsJson(filteredTransactions);
+  }, [filteredTransactions]);
 
   const showEmptyFiltered =
     transactions.length > 0 && filteredTransactions.length === 0;
@@ -266,10 +284,7 @@ export function Transactions() {
           </div>
           <button
             type="button"
-            onClick={() => {
-              resetFilters();
-              toast.info("Filters reset");
-            }}
+            onClick={handleResetFilters}
             className="self-start rounded-lg border border-fd-border-light bg-fd-elevated px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
           >
             Clear filters
@@ -352,24 +367,21 @@ export function Transactions() {
               <>
                 <button
                   type="button"
-                  onClick={() => exportTransactionsCsv(filteredTransactions)}
+                  onClick={handleExportCsv}
                   className="rounded-lg border border-fd-border-light bg-fd-glass-26 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
                 >
                   Export CSV
                 </button>
                 <button
                   type="button"
-                  onClick={() => exportTransactionsJson(filteredTransactions)}
+                  onClick={handleExportJson}
                   className="rounded-lg border border-fd-border-light bg-fd-glass-26 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
                 >
                   Export JSON
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    resetToMock();
-                    toast.info("Restored dataset");
-                  }}
+                  onClick={handleResetToMock}
                   className="rounded-lg border border-fd-border-light bg-fd-glass-26 px-3 py-1.5 text-xs font-medium text-fd-text-muted hover:text-fd-text cursor-pointer"
                 >
                   Reset Data

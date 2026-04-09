@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react"
 import {
   Area,
   AreaChart,
@@ -28,7 +29,7 @@ const tooltipStyle = {
   labelStyle: { color: "#9da3af" },
 };
 
-function StatCard({ title, value, accent, icon }) {
+const StatCard = memo(function StatCard({ title, value, accent, icon}) {
   const bg =
     accent === "accent"
       ? "bg-fd-accent-soft border-fd-border-accent"
@@ -62,21 +63,20 @@ function StatCard({ title, value, accent, icon }) {
           {value}
         </p>
       </div>
-      <div className={`h-8 w-8 sm:h-12 sm:w-12 lg:h-14 lg:w-14 rounded-lg sm:rounded-xl lg:rounded-2xl ${iconBg} flex items-center justify-center ${iconColor}`}>
+      <div className={`h-12 w-12 lg:h-14 lg:w-14 rounded-lg sm:rounded-xl lg:rounded-2xl ${iconBg} flex items-center justify-center ${iconColor}`}>
         {icon}
       </div>
-      {/* {hint ? <p className="mt-1 text-xs text-fd-text-accent">{hint}</p> : null} */}
     </div>
   );
-}
+})
 
-function EmptyChart({ message }) {
+const EmptyChart = memo(function EmptyChart({ message }) {
   return (
     <div className="flex h-64 items-center justify-center px-4 text-center text-sm text-fd-text-muted sm:h-72">
       {message}
     </div>
   );
-}
+})
 
 export function Dashboard() {
   const {
@@ -88,9 +88,12 @@ export function Dashboard() {
     insights,
   } = useFinance();
 
-  const recent = [...transactions]
-    .sort((a, b) => b.date.localeCompare(a.date))
-    .slice(0, 5);
+  const recent = useMemo(
+    () => [...transactions]
+      .sort((a, b) => b.date.localeCompare(a.date))
+      .slice(0, 5),
+    [transactions]
+  );
 
   const hasData = transactions.length > 0;
 
@@ -125,7 +128,7 @@ export function Dashboard() {
             icon={<FiArrowUpRight className="h-6 w-6" />}
           />
         </div>
-        <div data-reveal>
+        <div data-reveal className="sm:col-start-1 sm:col-end-3 md:col-auto">
           <StatCard
             title="Total expenses"
             value={currency(summary.totalExpense)}
@@ -348,7 +351,7 @@ export function Dashboard() {
           <p className="mt-0.5 text-sm text-fd-text-muted">
             Quick signals from your data
           </p>
-          <ul className="mt-4 space-y-3 text-sm grid md:grid-cols-3 md:gap-3 lg:block sm:grid-cols-2 sm:gap-2">
+          <ul className="mt-4 space-y-3 text-sm grid md:grid-cols-3 md:gap-3 lg:block sm:grid-cols-2 gap-2">
             <li className="rounded-lg border border-fd-border-elevated-muted bg-fd-glass-5 p-3 lg:mb-3 mb-0">
               <p className="card-title">
                 Highest spending category
@@ -408,12 +411,12 @@ export function Dashboard() {
               <p className="mt-1 font-semibold tabular-nums text-fd-text">
                 {insights.avgExpense > 0 ? currency(insights.avgExpense) : "—"}
               </p>
-              <p className="mt-1 text-[11px] text-fd-text-muted">
+              <p className="mt-1 text-3xs text-fd-text-muted">
                 {insights.expenseTxCount} expense · {insights.incomeTxCount}{" "}
                 income records
               </p>
             </li>
-            <li className="border-t border-fd-border-elevated-muted pt-3 text-xs leading-relaxed text-fd-text-muted col-start-1 col-end-4">
+            <li className="border-t border-fd-border-elevated-muted pt-3 text-xs leading-relaxed text-fd-text-muted sm:col-start-1 sm:col-end-4">
               {insights.observation}
             </li>
           </ul>

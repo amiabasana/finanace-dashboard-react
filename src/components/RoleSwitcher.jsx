@@ -1,6 +1,7 @@
+import { memo } from 'react'
 import { useFinance } from '../context/FinanceContext.jsx'
 
-export function RoleSwitcher() {
+export const RoleSwitcher = memo(function RoleSwitcher() {
   const { role, setRole, isAdmin } = useFinance()
 
   return (
@@ -17,7 +18,7 @@ export function RoleSwitcher() {
       </select>
       <span
         id="role-hint"
-        className="hidden rounded-md border border-fd-border px-2 py-1 text-[10px] text-fd-text-muted lg:inline lg:max-w-35 lg:truncate"
+        className="hidden rounded-md border border-fd-border px-2 py-1 text-4xs text-fd-text-muted lg:inline lg:max-w-35 lg:truncate"
         title={
           isAdmin
             ? 'You can add, edit, and remove transactions.'
@@ -28,4 +29,4 @@ export function RoleSwitcher() {
       </span>
     </div>
   )
-}
+})

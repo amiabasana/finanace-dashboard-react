@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, memo } from 'react'
 
-export function RevealOnScroll({ children, className = '' }) {
+export const RevealOnScroll = memo(function RevealOnScroll({ children, className = '' }) {
   const containerRef = useRef(null)
 
   useEffect(() => {
@@ -35,4 +35,4 @@ export function RevealOnScroll({ children, className = '' }) {
       {children}
     </div>
   )
-}
+})

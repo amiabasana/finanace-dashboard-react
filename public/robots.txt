@@ -1,0 +1,25 @@
+# robots.txt for Fido Finance Dashboard
+# https://fido.org/robots.txt
+
+User-agent: *
+Allow: /
+
+# Disallow access to sensitive or development files
+Disallow: /node_modules/
+Disallow: /src/
+Disallow: /dist/
+Disallow: /.git/
+Disallow: /.github/
+Disallow: /coverage/
+Disallow: /.env
+Disallow: /.env.local
+Disallow: /.env.production
+Disallow: /.env.development
+
+# Allow access to static assets
+Allow: /assets/
+Allow: /favicon.ico
+Allow: /manifest.json
+
+# Sitemap
+Sitemap: https://fido.org/sitemap.xml
