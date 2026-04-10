@@ -23,8 +23,7 @@ const pageLinks = [
   { to: '/insights', label: 'Insights', end: false, icon: FiBarChart2 },
 ]
 
-// Memoized NavLink component
-const NavItem = memo(function NavItem({ item, isActive, linkClass, desktopExpanded, onNavClick }) {
+const NavItem = memo(function NavItem({ item, linkClass, desktopExpanded, onNavClick }) {
   const Icon = item.icon
   return (
     <NavLink
@@ -49,34 +48,31 @@ export function AppLayout() {
   const { theme, toggleTheme, isAdmin } = useFinance()
   const location = useLocation()
   const [showScroll, setShowScroll] = useState(false)
-  const mainRef = useRef(null)
 
-  const roleBadgeClass = useMemo(
-    () => isAdmin
-      ? 'bg-fd-accent-soft text-fd-text-accent border border-fd-border-accent'
-      : 'bg-fd-glass-5 text-fd-text-muted border border-fd-border',
-    [isAdmin]
-  )
+  //Window scroll listener
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScroll(window.scrollY > 300)
+    }
 
-  const handleMainScroll = useCallback(() => {
-    if (!mainRef.current) return
-    setShowScroll(mainRef.current.scrollTop > 300)
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const handleMobileOpen = useCallback(() => {
-    setMobileOpen(true)
-  }, [])
+  // Auto scroll to top on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0 })
+  }, [location.pathname])
 
-  const handleMobileClose = useCallback(() => {
-    setMobileOpen(false)
-  }, [])
-
+  const handleMobileOpen = useCallback(() => setMobileOpen(true), [])
+  const handleMobileClose = useCallback(() => setMobileOpen(false), [])
   const handleToggleSidebar = useCallback(() => {
     setDesktopExpanded((prev) => !prev)
   }, [])
 
+  //Scroll to top using window
   const handleScrollToTop = useCallback(() => {
-    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   const pageTitle = useMemo(() => {
@@ -242,7 +238,7 @@ export function AppLayout() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="rounded-lg border border-fd-border-elevated-50 bg-fd-surface p-2 text-fd-text transition hover:bg-fd-glass-12 cursor-pointer"
+            className="rounded-lg border border-fd-border-elevated-50 bg-fd-elevated p-2 text-fd-text transition hover:bg-fd-glass-12 cursor-pointer"
             aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
           >
             {theme === 'light' ? (
@@ -254,17 +250,18 @@ export function AppLayout() {
           <RoleSwitcher />
         </header>
 
-        <main ref={mainRef} onScroll={handleMainScroll} className="flex-1 overflow-auto p-4 sm:p-6">
+        <main className="flex-1 overflow-auto p-4 sm:p-6">
           <Outlet />
         </main>
         <button
           type="button"
           onClick={handleScrollToTop}
           aria-label="Scroll to top"
-          className={`fixed bottom-6 right-6 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-fd-border bg-fd-border-elevated-muted text-fd-text transition duration-300 hover:bg-fd-glass-12 focus:outline-none focus:ring-2 focus:ring-fd-accent sm:bottom-8 sm:right-8 ${showScroll ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+          className={`fixed bottom-6 right-6 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-fd-border bg-fd-border-elevated-muted text-fd-text transition duration-300 hover:bg-fd-glass-12 hover:border-fd-border-accent focus:outline-none focus:ring-2 focus:ring-fd-accent sm:bottom-8 sm:right-8 cursor-pointer ${showScroll ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
         >
           <FiArrowUp className="h-5 w-5" />
         </button>
+
         {/* Footer */}
         <Footer/>
       </div>
